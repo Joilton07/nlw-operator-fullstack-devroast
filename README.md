@@ -1,19 +1,19 @@
 # 🔥 DevRoast
 
-**Paste your code. Get roasted.**
+**Cole seu código. Leve um roast.**
 
-DevRoast is a code quality analyzer that roasts your code with style. Built during **NLW (Next Level Week)** by [Rocketseat](https://rocketseat.com.br).
+DevRoast é um analisador de qualidade de código que dá um roast no seu código com estilo. Construído durante a **NLW (Next Level Week)** da [Rocketseat](https://rocketseat.com.br).
 
-## Features
+## Funcionalidades
 
-- **Code Editor** — paste or type code in our monospace editor with line numbers
-- **Roast Mode** — toggle between honest feedback and sarcastic mode
-- **Score Ring** — visual rating from 0 to 10 with color-coded severity
-- **Shame Leaderboard** — the worst code snippets ranked by shame score
-- **Dark & Light themes** — because bad code looks better in the dark
-- **Syntax Highlighting** — powered by shiki with multiple themes
+- **Editor de Código** — cole ou digite código no editor monoespaçado com numeração de linhas
+- **Modo Roast** — alterne entre feedback honesto e sarcasmo máximo
+- **Score Ring** — avaliação visual de 0 a 10 com cores por severidade
+- **Shame Leaderboard** — os piores códigos ranqueados por nota de vergonha
+- **Temas Claro & Escuro** — código ruim fica melhor no escuro
+- **Syntax Highlighting** — powered by shiki
 
-## Built with
+## Tecnologias
 
 - Next.js 16
 - Tailwind CSS v4
@@ -22,15 +22,15 @@ DevRoast is a code quality analyzer that roasts your code with style. Built duri
 - @base-ui/react
 - shiki
 
-## Getting Started
+## Como rodar
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Abra [http://localhost:3000](http://localhost:3000).
 
-## About NLW
+## Sobre a NLW
 
-NLW (Next Level Week) is an event by Rocketseat where developers build a complete project from scratch in one week.
+A NLW (Next Level Week) é um evento da Rocketseat onde desenvolvedores constroem um projeto completo do zero em uma semana.
