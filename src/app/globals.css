@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  --color-page: #f5f5f4;
+  --color-surface: #fafaf9;
+  --color-input: #f5f5f4;
+  --color-elevated: #ffffff;
+  --color-border: #e5e5e5;
+  --color-border-focus: #10b981;
+
+  --color-text-primary: #171717;
+  --color-text-secondary: #737373;
+  --color-text-tertiary: #a3a3a3;
+  --color-text-muted: #d4d4d4;
+
+  --color-accent-green: #10b981;
+  --color-accent-red: #ef4444;
+  --color-accent-amber: #f59e0b;
+  --color-accent-cyan: #06b6d4;
+
+  --color-syn-keyword: #7c3aed;
+  --color-syn-function: #2563eb;
+  --color-syn-variable: #dc2626;
+  --color-syn-number: #d97706;
+  --color-syn-operator: #4b5563;
+  --color-syn-string: #059669;
+  --color-syn-property: #16a34a;
+  --color-syn-type: #d97706;
+
+  --color-diff-added-bg: #f0fdf4;
+  --color-diff-added-text: #166534;
+  --color-diff-removed-bg: #fef2f2;
+  --color-diff-removed-text: #991b1b;
+  --color-diff-context-bg: transparent;
+}
+
+@variant dark {
+  :root {
+    --color-page: #0a0a0a;
+    --color-surface: #0f0f0f;
+    --color-input: #111111;
+    --color-elevated: #1a1a1a;
+    --color-border: #2a2a2a;
+    --color-border-focus: #10b981;
+
+    --color-text-primary: #fafafa;
+    --color-text-secondary: #6b7280;
+    --color-text-tertiary: #4b5563;
+    --color-text-muted: #525252;
+
+    --color-syn-keyword: #a0a0a0;
+    --color-syn-function: #ffc799;
+    --color-syn-variable: #ffffff;
+    --color-syn-number: #ffc799;
+    --color-syn-operator: #a0a0a0;
+    --color-syn-string: #99ffe4;
+    --color-syn-property: #a0a0a0;
+    --color-syn-type: #ffc799;
+
+    --color-diff-added-bg: #0a1a0f;
+    --color-diff-added-text: #86efac;
+    --color-diff-removed-bg: #1a0a0a;
+    --color-diff-removed-text: #fca5a5;
+    --color-diff-context-bg: transparent;
+  }
+}
