@@ -13,15 +13,6 @@ DevRoast é um analisador de qualidade de código que dá um roast no seu códig
 - **Temas Claro & Escuro** — código ruim fica melhor no escuro
 - **Syntax Highlighting** — powered by shiki
 
-## Tecnologias
-
-- Next.js 16
-- Tailwind CSS v4
-- TypeScript
-- Biome
-- @base-ui/react
-- shiki
-
 ## Como rodar
 
 ```bash
@@ -30,7 +21,3 @@ npm run dev
 ```
 
 Abra [http://localhost:3000](http://localhost:3000).
-
-## Sobre a NLW
-
-A NLW (Next Level Week) é um evento da Rocketseat onde desenvolvedores constroem um projeto completo do zero em uma semana.
