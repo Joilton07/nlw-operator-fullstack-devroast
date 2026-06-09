@@ -13,13 +13,7 @@ import {
 } from '@/components/ui/TableRow';
 import { Toggle } from '@/components/ui/Toggle';
 
-const defaultCode = `function calculateTotal(items) {
-  var total = 0;
-  for (var i = 0; i < items.length; i++) {
-    total = total + items[i].price;
-  }
-  return total;
-}`;
+const defaultCode = '';
 
 export default function Home() {
   const [code, setCode] = useState(defaultCode);
