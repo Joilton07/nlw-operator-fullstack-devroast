@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { CodeEditor } from '@/components/CodeEditor';
+import { CHAR_LIMIT, CodeEditor } from '@/components/CodeEditor';
 import { Button } from '@/components/ui/Button';
 import {
   TableRow,
@@ -46,7 +46,11 @@ export default function Home() {
             {'//'} maximum sarcasm enabled
           </span>
         </div>
-        <Button variant="primary" size="md" disabled={!code.trim()}>
+        <Button
+          variant="primary"
+          size="md"
+          disabled={!code.trim() || code.length > CHAR_LIMIT}
+        >
           $ roast_my_code
         </Button>
       </div>

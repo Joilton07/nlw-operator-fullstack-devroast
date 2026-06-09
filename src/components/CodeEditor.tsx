@@ -7,6 +7,9 @@ import { HighlightedCode } from '@/components/HighlightedCode';
 const LINE_HEIGHT = 24;
 const PADDING_Y = 32;
 const MIN_LINES = 17;
+const MAX_HEIGHT = 480;
+
+export const CHAR_LIMIT = 2000;
 
 function detectLanguage(code: string): string {
   const trimmed = code.trim();
@@ -100,9 +103,12 @@ export function CodeEditor({ value, onChange }: CodeEditorProps) {
   const effectiveLang = language === 'auto' ? detectLanguage(value) : language;
 
   const lines = value === '' ? [] : value.split('\n');
-  const contentHeight = Math.max(
-    lines.length * LINE_HEIGHT + PADDING_Y,
-    MIN_LINES * LINE_HEIGHT + PADDING_Y,
+  const contentHeight = Math.min(
+    Math.max(
+      lines.length * LINE_HEIGHT + PADDING_Y,
+      MIN_LINES * LINE_HEIGHT + PADDING_Y,
+    ),
+    MAX_HEIGHT,
   );
 
   const highlightRef = useRef<HTMLDivElement>(null);
@@ -167,9 +173,20 @@ export function CodeEditor({ value, onChange }: CodeEditorProps) {
             onChange={(e) => onChange(e.target.value)}
             onScroll={handleScroll}
             onKeyDown={(e) => handleTab(e, value, onChange)}
-            className="absolute inset-0 resize-none overflow-auto whitespace-pre bg-transparent p-4 font-mono text-xs leading-6 text-transparent caret-text-primary outline-none selection:bg-accent-cyan/20"
+            className="absolute inset-0 resize-none overflow-auto whitespace-pre bg-transparent p-4 font-mono text-xs leading-6 text-transparent caret-text-primary outline-none selection:bg-accent-cyan/20 [scrollbar-width:thin] [scrollbar-color:var(--color-text-muted)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-text-muted"
             spellCheck={false}
           />
+          <div className="absolute bottom-0 right-0 z-10 px-3 py-1.5 font-mono text-[11px] pointer-events-none">
+            <span
+              className={
+                value.length > CHAR_LIMIT
+                  ? 'text-accent-red'
+                  : 'text-text-tertiary'
+              }
+            >
+              {value.length.toLocaleString()}/{CHAR_LIMIT.toLocaleString()}
+            </span>
+          </div>
         </div>
       </div>
     </div>
