@@ -1,9 +1,6 @@
-'use client';
-
 import Link from 'next/link';
-import { useState } from 'react';
-import { CHAR_LIMIT, CodeEditor } from '@/components/CodeEditor';
-import { Button } from '@/components/ui/Button';
+import { EditorSection } from '@/components/EditorSection';
+import { MetricsCards } from '@/components/ui/MetricsCards';
 import {
   TableRow,
   TableRowCode,
@@ -11,13 +8,8 @@ import {
   TableRowRank,
   TableRowScore,
 } from '@/components/ui/TableRow';
-import { Toggle } from '@/components/ui/Toggle';
-
-const defaultCode = '';
 
 export default function Home() {
-  const [code, setCode] = useState(defaultCode);
-
   return (
     <main className="mx-auto flex max-w-[960px] flex-col items-center gap-8 px-10 pt-20">
       <section className="flex flex-col items-center gap-3">
@@ -35,35 +27,9 @@ export default function Home() {
         </p>
       </section>
 
-      <div className="w-full max-w-[780px]">
-        <CodeEditor value={code} onChange={setCode} />
-      </div>
+      <EditorSection />
 
-      <div className="flex w-full max-w-[780px] items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Toggle label="roast mode" defaultChecked />
-          <span className="font-mono text-xs text-text-tertiary">
-            {'//'} maximum sarcasm enabled
-          </span>
-        </div>
-        <Button
-          variant="primary"
-          size="md"
-          disabled={!code.trim() || code.length > CHAR_LIMIT}
-        >
-          $ roast_my_code
-        </Button>
-      </div>
-
-      <div className="flex items-center gap-6">
-        <span className="font-mono text-xs text-text-tertiary">
-          2,847 codes roasted
-        </span>
-        <span className="font-mono text-xs text-text-tertiary">&middot;</span>
-        <span className="font-mono text-xs text-text-tertiary">
-          avg score: 4.2/10
-        </span>
-      </div>
+      <MetricsCards />
 
       <div className="h-15" />
 
