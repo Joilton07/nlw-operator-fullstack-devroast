@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/Card';
 import { CodeBlock } from '@/components/ui/CodeBlock';
+import { CodeBlockHeader } from '@/components/ui/CodeBlockHeader';
 import { DiffLine } from '@/components/ui/DiffLine';
 import { ScoreRing } from '@/components/ui/ScoreRing';
 import {
@@ -102,11 +103,10 @@ export default function Componentes() {
         <h2 className="font-mono text-sm font-bold text-text-primary">
           {'//'} code_block
         </h2>
-        <CodeBlock
-          code={diffCode}
-          language="javascript"
-          filename="calculate.js"
-        />
+        <div className="overflow-hidden rounded-lg border border-border bg-input">
+          <CodeBlockHeader filename="calculate.js" />
+          <CodeBlock code={diffCode} language="javascript" />
+        </div>
       </section>
 
       {/* DiffLine */}

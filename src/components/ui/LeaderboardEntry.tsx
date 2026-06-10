@@ -1,4 +1,4 @@
-import { codeToHtml } from 'shiki';
+import { CodeBlock } from '@/components/ui/CodeBlock';
 
 type LeaderboardEntryProps = {
   rank: number;
@@ -15,9 +15,6 @@ export async function LeaderboardEntry({
   lines,
   code,
 }: LeaderboardEntryProps) {
-  const html = await codeToHtml(code, { lang: language, theme: 'vesper' });
-  const lineCount = code.split('\n').length;
-
   const scoreColor =
     score < 3
       ? 'text-accent-red'
@@ -26,7 +23,7 @@ export async function LeaderboardEntry({
         : 'text-accent-green';
 
   return (
-    <div className="flex flex-col border border-border">
+    <div className="flex flex-col overflow-hidden rounded-lg border border-border">
       <div className="flex h-12 items-center justify-between border-b border-border px-5">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
@@ -51,24 +48,7 @@ export async function LeaderboardEntry({
           </span>
         </div>
       </div>
-      <div className="flex bg-input">
-        <div className="flex w-10 shrink-0 flex-col items-end gap-[6px] border-r border-border bg-surface px-[10px] py-3.5">
-          {Array.from({ length: lineCount }, (_, i) => (
-            <span
-              // biome-ignore lint/suspicious/noArrayIndexKey: static line numbers
-              key={i}
-              className="font-mono text-xs leading-none text-text-tertiary"
-            >
-              {i + 1}
-            </span>
-          ))}
-        </div>
-        <div
-          className="overflow-x-auto p-4 [&_pre]:!bg-transparent [&_pre]:!p-0 [&_code]:!font-mono [&_code]:!text-xs [&_code]:!leading-none"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: shiki generates safe HTML server-side
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
-      </div>
+      <CodeBlock code={code} language={language} />
     </div>
   );
 }
