@@ -130,3 +130,14 @@ export async function getTopSubmissions(
 ): Promise<LeaderboardEntry[]> {
   return getLeaderboard(limit, 0);
 }
+
+export async function getWorstSubmissions(
+  limit = 3,
+): Promise<LeaderboardEntry[]> {
+  return db
+    .select()
+    .from(submissions)
+    .where(isNotNull(submissions.score))
+    .orderBy(asc(submissions.score))
+    .limit(limit);
+}

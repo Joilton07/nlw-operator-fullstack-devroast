@@ -9,28 +9,31 @@ const cssVarsTheme = createCssVariablesTheme({
   name: 'css-variables',
 });
 
+// biome-ignore lint/suspicious/noExplicitAny: Shiki language import types are dynamic
+const languageLoaders: Record<string, () => Promise<any>> = {
+  javascript: () => import('@shikijs/langs/javascript'),
+  typescript: () => import('@shikijs/langs/typescript'),
+  jsx: () => import('@shikijs/langs/jsx'),
+  tsx: () => import('@shikijs/langs/tsx'),
+  html: () => import('@shikijs/langs/html'),
+  css: () => import('@shikijs/langs/css'),
+  python: () => import('@shikijs/langs/python'),
+  go: () => import('@shikijs/langs/go'),
+  rust: () => import('@shikijs/langs/rust'),
+  java: () => import('@shikijs/langs/java'),
+  ruby: () => import('@shikijs/langs/ruby'),
+  php: () => import('@shikijs/langs/php'),
+  sql: () => import('@shikijs/langs/sql'),
+  shellscript: () => import('@shikijs/langs/shellscript'),
+};
+
 let highlighterPromise: Promise<HighlighterCore> | null = null;
 
 function getHighlighter() {
   if (!highlighterPromise) {
     highlighterPromise = createHighlighterCore({
       themes: [cssVarsTheme],
-      langs: [
-        import('@shikijs/langs/javascript'),
-        import('@shikijs/langs/typescript'),
-        import('@shikijs/langs/jsx'),
-        import('@shikijs/langs/tsx'),
-        import('@shikijs/langs/html'),
-        import('@shikijs/langs/css'),
-        import('@shikijs/langs/python'),
-        import('@shikijs/langs/go'),
-        import('@shikijs/langs/rust'),
-        import('@shikijs/langs/java'),
-        import('@shikijs/langs/ruby'),
-        import('@shikijs/langs/php'),
-        import('@shikijs/langs/sql'),
-        import('@shikijs/langs/shellscript'),
-      ],
+      langs: [],
       engine: createJavaScriptRegexEngine(),
     });
   }
@@ -44,31 +47,52 @@ type HighlightedCodeProps = {
 
 export function HighlightedCode({ code, language }: HighlightedCodeProps) {
   const [html, setHtml] = useState<string | null>(null);
+  const [loadingLang, setLoadingLang] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
 
-    getHighlighter()
-      .then((hl) => {
-        if (cancelled) return;
-        try {
-          const lang = language === 'auto' ? 'text' : language;
-          const result = hl.codeToHtml(code, { lang, theme: 'css-variables' });
-          setHtml(result);
-        } catch {
-          setHtml(null);
+    async function highlight() {
+      const hl = await getHighlighter();
+      if (cancelled) return;
+
+      const loadedLangs = hl.getLoadedLanguages() as string[];
+      const lang = language === 'auto' ? 'text' : language;
+
+      if (lang !== 'text' && !loadedLangs.includes(lang)) {
+        const loader = languageLoaders[lang];
+        if (loader) {
+          setLoadingLang(true);
+          try {
+            const mod = await loader();
+            if (cancelled) return;
+            await hl.loadLanguage(mod.default ?? mod);
+          } catch {
+            if (!cancelled) setHtml(null);
+            setLoadingLang(false);
+            return;
+          }
+          setLoadingLang(false);
         }
-      })
-      .catch(() => {
+      }
+
+      if (cancelled) return;
+      try {
+        const result = hl.codeToHtml(code, { lang, theme: 'css-variables' });
+        setHtml(result);
+      } catch {
         if (!cancelled) setHtml(null);
-      });
+      }
+    }
+
+    highlight();
 
     return () => {
       cancelled = true;
     };
   }, [code, language]);
 
-  if (!html) {
+  if (!html || loadingLang) {
     return (
       <pre className="!m-0 !p-0 !overflow-visible bg-transparent font-mono text-xs leading-6 text-text-primary">
         <code>{code}</code>
@@ -78,7 +102,7 @@ export function HighlightedCode({ code, language }: HighlightedCodeProps) {
 
   return (
     <div
-      className="[&_pre]:!m-0 [&_pre]:!p-0 [&_pre]:!bg-transparent [&_pre]:!overflow-visible [&_code]:!font-mono [&_code]:!text-xs [&_code]:!leading-6"
+      className="[&_pre]:!m-0 [&_pre]:!p-0 [&_pre]:!bg-transparent [&_pre]:!overflow-visible [&_pre]:!text-xs [&_pre]:!leading-6 [&_code]:!font-mono [&_code]:!text-xs [&_code]:!leading-6"
       style={
         {
           '--shiki-foreground': 'var(--color-text-primary)',
