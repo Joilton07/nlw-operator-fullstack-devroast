@@ -83,7 +83,7 @@ async function LeaderboardContent() {
                   </span>
                 </div>
               </div>
-              <CollapsibleCode>
+              <CollapsibleCode maxHeight={89}>
                 <CodeBlock
                   code={entry.codeContent}
                   language={entry.language ?? 'typescript'}
