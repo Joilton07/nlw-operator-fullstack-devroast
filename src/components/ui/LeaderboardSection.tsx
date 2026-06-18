@@ -37,7 +37,7 @@ export function LeaderboardSection() {
 
 async function LeaderboardContent() {
   const caller = appRouter.createCaller({});
-  const { entries, totalCount } = await caller.leaderboard.getWorst();
+  const { entries, totalCount } = await caller.leaderboard.getWorst({ limit: 3 });
 
   return (
     <>
