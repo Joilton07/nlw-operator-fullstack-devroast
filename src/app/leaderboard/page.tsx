@@ -8,9 +8,11 @@ import { LeaderboardSkeleton } from '@/components/ui/LeaderboardSkeleton';
 
 export default function Leaderboard() {
   const trpc = useTRPC();
-  const { data, isPending, isError } = useQuery(
-    trpc.leaderboard.getWorst.queryOptions({ limit: 20 }),
-  );
+  const { data, isPending, isError } = useQuery({
+    ...trpc.leaderboard.getWorst.queryOptions({ limit: 20 }),
+    staleTime: 1000 * 60 * 60,
+    gcTime: 1000 * 60 * 60,
+  });
 
   const scoreColor = (score: number) => {
     if (score < 3) return 'text-accent-red';

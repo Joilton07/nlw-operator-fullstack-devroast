@@ -1,6 +1,8 @@
-import { EditorSection } from '@/components/EditorSection';
 import { LeaderboardSection } from '@/components/ui/LeaderboardSection';
+import { EditorSection } from '@/components/EditorSection';
 import { MetricsCards } from '@/components/ui/MetricsCards';
+
+export const revalidate = 3600;
 
 export default function Home() {
   return (
