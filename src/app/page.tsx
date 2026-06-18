@@ -2,8 +2,6 @@ import { LeaderboardSection } from '@/components/ui/LeaderboardSection';
 import { EditorSection } from '@/components/EditorSection';
 import { MetricsCards } from '@/components/ui/MetricsCards';
 
-export const revalidate = 3600;
-
 export default function Home() {
   return (
     <main className="mx-auto flex max-w-[960px] flex-col items-center gap-8 px-10 pt-20">

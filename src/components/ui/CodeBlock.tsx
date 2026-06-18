@@ -1,4 +1,5 @@
 import { codeToHtml } from 'shiki';
+import { cacheLife } from 'next/cache';
 
 type CodeBlockProps = {
   code: string;
@@ -6,6 +7,8 @@ type CodeBlockProps = {
 };
 
 export async function CodeBlock({ code, language }: CodeBlockProps) {
+  'use cache'
+  cacheLife('hours')
   const html = await codeToHtml(code, {
     lang: language,
     theme: 'vesper',

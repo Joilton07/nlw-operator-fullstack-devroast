@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import './globals.css';
 import { Navbar } from '@/components/ui/Navbar';
 import { TRPCReactProvider } from '@/lib/trpc/client';
@@ -16,10 +17,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-page">
-        <TRPCReactProvider>
-          <Navbar />
-          {children}
-        </TRPCReactProvider>
+        <Suspense fallback={null}>
+          <TRPCReactProvider>
+            <Navbar />
+            {children}
+          </TRPCReactProvider>
+        </Suspense>
       </body>
     </html>
   );
