@@ -1,58 +1,22 @@
-import { LeaderboardEntry } from '@/components/ui/LeaderboardEntry';
+'use client';
 
-const entries = [
-  {
-    rank: 1,
-    score: 1.2,
-    language: 'javascript',
-    lines: 3,
-    code: [
-      "eval(prompt('enter code'))",
-      'document.write(response)',
-      '// trust the user lol',
-    ].join('\n'),
-  },
-  {
-    rank: 2,
-    score: 1.8,
-    language: 'typescript',
-    lines: 3,
-    code: [
-      'if (x == true) { return true; }',
-      'else if (x == false) { return false; }',
-      'else { return !false; }',
-    ].join('\n'),
-  },
-  {
-    rank: 3,
-    score: 2.1,
-    language: 'sql',
-    lines: 2,
-    code: ['SELECT * FROM users WHERE 1=1', '-- TODO: add authentication'].join(
-      '\n',
-    ),
-  },
-  {
-    rank: 4,
-    score: 2.3,
-    language: 'java',
-    lines: 3,
-    code: ['catch (e) {', '  // ignore', '}'].join('\n'),
-  },
-  {
-    rank: 5,
-    score: 2.5,
-    language: 'javascript',
-    lines: 3,
-    code: [
-      'const sleep = (ms) =>',
-      '  new Date(Date.now() + ms)',
-      '  while(new Date() < end) {}',
-    ].join('\n'),
-  },
-];
+import { useQuery } from '@tanstack/react-query';
+import { useTRPC } from '@/lib/trpc/client';
+import { CollapsibleCode } from '@/components/CollapsibleCode';
+import { CodeBlockClient } from '@/components/ui/CodeBlockClient';
 
-export default async function Leaderboard() {
+export default function Leaderboard() {
+  const trpc = useTRPC();
+  const { data, isPending, isError } = useQuery(
+    trpc.leaderboard.getWorst.queryOptions({ limit: 20 }),
+  );
+
+  const scoreColor = (score: number) => {
+    if (score < 3) return 'text-accent-red';
+    if (score < 6) return 'text-accent-amber';
+    return 'text-accent-green';
+  };
+
   return (
     <div className="mx-auto max-w-3xl px-20 py-10">
       <div className="flex flex-col gap-10">
@@ -68,30 +32,140 @@ export default async function Leaderboard() {
           <p className="font-mono text-sm text-text-secondary">
             {'// the most roasted code on the internet'}
           </p>
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-xs text-text-tertiary">
-              2,847 submissions
-            </span>
-            <span className="font-mono text-xs text-text-tertiary">·</span>
-            <span className="font-mono text-xs text-text-tertiary">
-              avg score: 4.2/10
-            </span>
-          </div>
+          {data && (
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xs text-text-tertiary">
+                {data.totalCount.toLocaleString()} submissions
+              </span>
+            </div>
+          )}
         </div>
 
-        <div className="flex flex-col gap-5">
-          {entries.map((entry) => (
-            <LeaderboardEntry
-              key={entry.rank}
-              rank={entry.rank}
-              score={entry.score}
-              language={entry.language}
-              lines={entry.lines}
-              code={entry.code}
-            />
-          ))}
-        </div>
+        {isPending && <LeaderboardSkeleton />}
+
+        {isError && (
+          <div className="flex flex-col items-center gap-2 py-20">
+            <span className="font-mono text-sm text-accent-red">
+              {'// failed to load leaderboard'}
+            </span>
+            <span className="font-mono text-xs text-text-tertiary">
+              {'try again later'}
+            </span>
+          </div>
+        )}
+
+        {data && data.entries.length === 0 && (
+          <div className="flex flex-col items-center gap-2 py-20">
+            <span className="font-mono text-sm text-text-secondary">
+              {'// no code has been roasted yet'}
+            </span>
+            <span className="font-mono text-xs text-text-tertiary">
+              {'be the first.'}
+            </span>
+          </div>
+        )}
+
+        {data && data.entries.length > 0 && (
+          <div className="flex flex-col gap-5">
+            {data.entries.map((entry, i) => {
+              const score = Number(entry.score);
+              return (
+                <div
+                  key={entry.id}
+                  className="overflow-hidden rounded-lg border border-border"
+                >
+                  <div className="flex h-12 items-center justify-between border-b border-border bg-surface px-5">
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-mono text-[13px] text-text-tertiary">
+                          #
+                        </span>
+                        <span className="font-mono text-[13px] font-bold text-accent-amber">
+                          {i + 1}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-mono text-xs text-text-tertiary">
+                          score:
+                        </span>
+                        <span
+                          className={`font-mono text-[13px] font-bold ${scoreColor(score)}`}
+                        >
+                          {score.toFixed(1)}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono text-xs text-text-secondary">
+                        {entry.language ?? '—'}
+                      </span>
+                    </div>
+                  </div>
+                  <CollapsibleCode maxHeight={89}>
+                    <CodeBlockClient
+                      code={entry.codeContent}
+                      language={entry.language ?? 'typescript'}
+                    />
+                  </CollapsibleCode>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
+    </div>
+  );
+}
+
+function LeaderboardSkeleton() {
+  const lineNumbers = [1, 2, 3, 4, 5];
+
+  return (
+    <div className="flex flex-col gap-5">
+      {Array.from({ length: 3 }, (_, i) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: static skeleton
+        <div key={i} className="overflow-hidden rounded-lg border border-border">
+          <div className="flex h-12 items-center justify-between border-b border-border bg-surface px-5">
+            <div className="flex items-center gap-4">
+              <div className="h-4 w-12 animate-pulse rounded-sm bg-surface-alt" />
+              <div className="h-4 w-20 animate-pulse rounded-sm bg-surface-alt" />
+            </div>
+            <div className="h-4 w-16 animate-pulse rounded-sm bg-surface-alt" />
+          </div>
+          <div className="p-3">
+            <div className="flex gap-3">
+              <div className="flex flex-col gap-[6px]">
+                {lineNumbers.map((n) => (
+                  <div
+                    key={n}
+                    className="h-3 w-6 animate-pulse rounded-sm bg-surface-alt"
+                  />
+                ))}
+              </div>
+              <div className="flex flex-1 flex-col gap-[6px]">
+                {lineNumbers.map((n) => (
+                  <div
+                    key={n}
+                    className="h-3 animate-pulse rounded-sm bg-surface-alt"
+                    style={{
+                      width:
+                        n === 1
+                          ? '75%'
+                          : n === 2
+                            ? '60%'
+                            : n === 3
+                              ? '85%'
+                              : n === 4
+                                ? '55%'
+                                : '70%',
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
