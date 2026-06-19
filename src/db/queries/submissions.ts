@@ -64,6 +64,17 @@ export async function insertSuggestedFix(data: {
   return fix;
 }
 
+export async function updateSubmissionStatus(
+  id: number,
+  status: 'pending' | 'processing' | 'completed' | 'error',
+  errorMessage?: string,
+) {
+  await db
+    .update(submissions)
+    .set({ status, errorMessage: errorMessage ?? null })
+    .where(eq(submissions.id, id));
+}
+
 export async function getSubmissionById(
   id: number,
 ): Promise<SubmissionWithIssues | null> {
