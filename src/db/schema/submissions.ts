@@ -16,5 +16,7 @@ export const submissions = pgTable('submissions', {
   roastQuote: text(),
   roastMode: roastMode().notNull(),
   verdict: verdict(),
+  status: varchar({ length: 16 }).notNull().default('pending'),
+  errorMessage: text(),
   createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
 });
