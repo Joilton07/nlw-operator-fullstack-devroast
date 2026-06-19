@@ -12,8 +12,11 @@ export function LeaderboardSkeleton({
   return (
     <div className="flex flex-col gap-5">
       {Array.from({ length: count }, (_, i) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: static skeleton
-        <div key={i} className="overflow-hidden rounded-lg border border-border">
+        <div
+          // biome-ignore lint/suspicious/noArrayIndexKey: static skeleton
+          key={i}
+          className="overflow-hidden rounded-lg border border-border"
+        >
           <div className="flex h-12 items-center justify-between border-b border-border bg-surface px-5">
             <div className="flex items-center gap-4">
               <div className="h-4 w-12 animate-pulse rounded-sm bg-surface-alt" />
