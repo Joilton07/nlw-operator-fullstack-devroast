@@ -1,11 +1,8 @@
-import { z } from 'zod';
-import { createTRPCRouter, baseProcedure } from '../init';
-import {
-  getSubmissionById,
-  insertSubmission,
-} from '@/db/queries/submissions';
-import { processRoast } from '@/lib/ai/roast';
 import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
+import { getSubmissionById, insertSubmission } from '@/db/queries/submissions';
+import { processRoast } from '@/lib/ai/roast';
+import { baseProcedure, createTRPCRouter } from '../init';
 
 export const roastRouter = createTRPCRouter({
   submit: baseProcedure
@@ -40,8 +37,9 @@ export const roastRouter = createTRPCRouter({
       }
 
       if (sub.status !== 'completed') {
+        const status = sub.status as 'pending' | 'processing' | 'error';
         return {
-          status: sub.status,
+          status,
           submission: {
             id: sub.id,
             codeContent: sub.codeContent,
