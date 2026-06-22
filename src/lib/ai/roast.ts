@@ -1,12 +1,12 @@
+import { eq } from 'drizzle-orm';
 import { db } from '@/db';
-import { submissions } from '@/db/schema';
 import {
   getSubmissionById,
   insertAnalysisIssue,
   insertSuggestedFix,
   updateSubmissionStatus,
 } from '@/db/queries/submissions';
-import { eq } from 'drizzle-orm';
+import { submissions } from '@/db/schema';
 import { callOpenAI, type OpenAIMessage } from './client';
 
 type OpenAIResult = {
@@ -28,7 +28,10 @@ type OpenAIResult = {
   }>;
 };
 
-function buildPrompt(code: string, roastMode: 'honest' | 'sarcasm'): OpenAIMessage[] {
+function buildPrompt(
+  code: string,
+  roastMode: 'honest' | 'sarcasm',
+): OpenAIMessage[] {
   const systemPrompt =
     roastMode === 'sarcasm'
       ? 'You are a brutally sarcastic code reviewer. Analyze the provided code and return a JSON object with score (0-10), verdict ("critical" | "warning" | "good" | "needs_serious_help"), roastQuote (one funny, sarcastic sentence roasting the code), and issues array. Each issue has severity ("critical" | "warning" | "good"), title, description, lineStart (number or null), lineEnd (number or null), and fixes array (each fix has diffType: "removed" | "added" | "context", codeContent, lineNumber (number or null), sortOrder (number)). Be funny but still provide useful, constructive feedback.'

@@ -39,10 +39,14 @@ export default function RoastPage({
 
   if (!data || data.status === 'error') {
     return (
-      <div className="mx-auto max-w-3xl px-20 py-10">
-        <p className="font-mono text-text-secondary">
-          {'// failed_to_load_roast'}
-        </p>
+      <div className="mx-auto flex max-w-3xl flex-col gap-4 px-20 py-10">
+        <p className="font-mono text-accent-red">{'// failed_to_roast'}</p>
+        {data?.errorMessage && (
+          <p className="font-mono text-xs text-text-tertiary">
+            {'// '}
+            {data.errorMessage}
+          </p>
+        )}
       </div>
     );
   }
