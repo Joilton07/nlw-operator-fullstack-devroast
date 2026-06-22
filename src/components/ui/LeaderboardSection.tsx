@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { cacheLife } from 'next/cache';
+import Link from 'next/link';
 import { Suspense } from 'react';
 import { appRouter } from '@/lib/trpc/routers/_app';
 import { CollapsibleCode } from '../CollapsibleCode';
@@ -38,10 +38,12 @@ export function LeaderboardSection() {
 }
 
 async function LeaderboardContent() {
-  'use cache'
-  cacheLife('hours')
+  'use cache';
+  cacheLife('hours');
   const caller = appRouter.createCaller({});
-  const { entries, totalCount } = await caller.leaderboard.getWorst({ limit: 3 });
+  const { entries, totalCount } = await caller.leaderboard.getWorst({
+    limit: 3,
+  });
 
   return (
     <>
@@ -112,5 +114,3 @@ async function LeaderboardContent() {
     </>
   );
 }
-
-

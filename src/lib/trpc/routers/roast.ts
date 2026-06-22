@@ -40,6 +40,7 @@ export const roastRouter = createTRPCRouter({
         const status = sub.status as 'pending' | 'processing' | 'error';
         return {
           status,
+          errorMessage: status === 'error' ? sub.errorMessage : null,
           submission: {
             id: sub.id,
             codeContent: sub.codeContent,
@@ -53,6 +54,7 @@ export const roastRouter = createTRPCRouter({
 
       return {
         status: 'completed',
+        errorMessage: null,
         submission: {
           id: sub.id,
           codeContent: sub.codeContent,

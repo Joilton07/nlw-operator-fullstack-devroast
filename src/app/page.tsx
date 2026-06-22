@@ -1,5 +1,5 @@
-import { LeaderboardSection } from '@/components/ui/LeaderboardSection';
 import { EditorSection } from '@/components/EditorSection';
+import { LeaderboardSection } from '@/components/ui/LeaderboardSection';
 import { MetricsCards } from '@/components/ui/MetricsCards';
 
 export default function Home() {

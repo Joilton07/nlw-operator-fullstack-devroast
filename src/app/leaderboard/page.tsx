@@ -1,10 +1,10 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { useTRPC } from '@/lib/trpc/client';
 import { CollapsibleCode } from '@/components/CollapsibleCode';
 import { CodeBlockClient } from '@/components/ui/CodeBlockClient';
 import { LeaderboardSkeleton } from '@/components/ui/LeaderboardSkeleton';
+import { useTRPC } from '@/lib/trpc/client';
 
 export default function Leaderboard() {
   const trpc = useTRPC();

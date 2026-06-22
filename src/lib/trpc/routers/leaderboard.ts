@@ -1,8 +1,8 @@
+import { z } from 'zod';
 import {
   getLeaderboardStats,
   getWorstSubmissions,
 } from '@/db/queries/submissions';
-import { z } from 'zod';
 import { baseProcedure, createTRPCRouter } from '../init';
 
 export const leaderboardRouter = createTRPCRouter({
